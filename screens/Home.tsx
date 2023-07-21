@@ -20,6 +20,13 @@ const Home = (props : HomeScreenProps ) => {
                 
                 <Text  style={HomeStyles.title}>Bluetooth </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={() => { props.navigation.navigate('Profile')}}
+            >
+                
+                <Text  style={HomeStyles.title}>Profile </Text>
+            </TouchableOpacity>
         </View>
     </SafeAreaView>
   )

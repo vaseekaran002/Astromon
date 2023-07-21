@@ -14,13 +14,6 @@ const Profile = (props : ProfileScreenProps ) => {
     <SafeAreaView>
         <View >
             <Text style={ProfileStyles.title} > ASTROMON  </Text>
-
-            <TouchableOpacity
-                onPress={() => { props.navigation.navigate('Profile')}}
-            >
-                
-                <Text  style={ProfileStyles.title}>Bluetooth </Text>
-            </TouchableOpacity>
         </View>
     </SafeAreaView>
   )
