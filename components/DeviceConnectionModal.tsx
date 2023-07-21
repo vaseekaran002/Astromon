@@ -7,6 +7,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import {Device} from 'react-native-ble-plx';
 
@@ -25,9 +26,8 @@ type DeviceModalProps = {
 
 const DeviceModalListItem: FC<DeviceModalListItemProps> = props => {
   const {item, connectToPeripheral, closeModal} = props;
-
   const connectAndCloseModal = useCallback(() => {
-    connectToPeripheral(item.item);
+    //connectToPeripheral(item.item);
     closeModal();
   }, [closeModal, connectToPeripheral, item.item]);
 
@@ -70,6 +70,7 @@ const DeviceModal: FC<DeviceModalProps> = props => {
           contentContainerStyle={modalStyle.modalFlatlistContiner}
           data={devices}
           renderItem={renderDeviceModalListItem}
+          ListEmptyComponent={<ActivityIndicator size="large" color="#000" />}
         />
       </SafeAreaView>
     </Modal>

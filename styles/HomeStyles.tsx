@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native'
 
 
 
-const HomeStyles = StyleSheet.create({
+const   ProfileStyles = StyleSheet.create({
     container : {
         flex: 1,
         justifyContent: 'center',
@@ -15,4 +15,4 @@ const HomeStyles = StyleSheet.create({
 })
 
 
-export default HomeStyles
+export default ProfileStyles

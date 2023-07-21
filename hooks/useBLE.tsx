@@ -15,6 +15,7 @@ interface BluetoothLowEnergyApi {
   scanForPeripherals(): void;
   allDevices : Device[]
   connectToDevice: (deviceId: Device) => Promise<void>;
+  startStreamingData(devics : Device) : Promise<void>
   connectedDevice: Device | null;
   heartRate: number;
   disconnectFromDevice: () => void;
@@ -152,6 +153,7 @@ export default function useBLE() : BluetoothLowEnergyApi{
         connectToDevice,
         connectedDevice,
         heartRate,
-        disconnectFromDevice
+        disconnectFromDevice,
+        startStreamingData
     }
 }
