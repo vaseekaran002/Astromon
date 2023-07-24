@@ -11,6 +11,7 @@ import DeviceModal from '../components/DeviceConnectionModal';
 import useBLE from '../hooks/useBLE';
 import { LineChart } from 'react-native-chart-kit';
 import { NavigationScreenProp } from 'react-navigation';
+import { COLORS } from '../constants/Theme';
 
 export interface HomeScreenProps {
   navigation: NavigationScreenProp<any,any>
@@ -83,7 +84,7 @@ const Bluetooth = (props : HomeScreenProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: COLORS.tertiary,
   },
   heartRateTitleWrapper: {
     flex: 1,
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     color:"#000"
   },
   ctaButton: {
-    backgroundColor: 'purple',
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,

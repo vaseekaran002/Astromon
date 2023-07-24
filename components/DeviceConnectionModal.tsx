@@ -10,6 +10,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import {Device} from 'react-native-ble-plx';
+import { COLORS } from '../constants/Theme';
 
 type DeviceModalListItemProps = {
   item: ListRenderItemInfo<Device>;
@@ -107,7 +108,7 @@ const modalStyle = StyleSheet.create({
     color : '#000'
   },
   ctaButton: {
-    backgroundColor: 'purple',
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,

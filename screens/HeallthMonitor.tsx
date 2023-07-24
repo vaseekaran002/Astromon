@@ -5,7 +5,8 @@ import useBLE from '../hooks/useBLE'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { LineChart } from 'react-native-chart-kit'
-
+import HealthMonitorStyles from '../styles/HealthMonitorStyle';
+import { COLORS } from '../constants/Theme';
 
 
 export interface HealthMonitorProps {
@@ -39,7 +40,7 @@ const HealthMonitor = (props : HealthMonitorProps) => {
         datasets: [
           {
             data: buffer,
-            color: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`, // Line color
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`, // Line color
             strokeWidth: 2, // Line width
           },
         ],
@@ -47,8 +48,8 @@ const HealthMonitor = (props : HealthMonitorProps) => {
 
     const chartConfig = {
 
-        backgroundGradientFrom: '#F9C0E1', // Set the chart background color to #FF0000
-        backgroundGradientTo: '#F9C0E1',
+        backgroundGradientFrom: COLORS.primary, 
+        backgroundGradientTo: COLORS.primary,
         decimalPlaces: 2,
         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         labelColor: (opacity = 1 ) => `rgba(255, 255, 255, ${opacity})`,
@@ -58,11 +59,10 @@ const HealthMonitor = (props : HealthMonitorProps) => {
         propsForDots: {
           r: '0', // Set the radius to 0 to hide the dots
           strokeWidth: '0',
-          stroke: '#ffa726',
         },
         propsForBackgroundLines: {
-          strokeWidth: 1,
-          stroke: '#FC0393', 
+          strokeWidth: 0,
+          stroke: '#FFF', 
         },
         propsForVerticalLabels: {
           fontSize: 10,
@@ -72,23 +72,24 @@ const HealthMonitor = (props : HealthMonitorProps) => {
           fontSize: 10,
           
         },
-        fillShadowGradientOpacity:0,
-        useShadowColorFromDataset : false,
-        bezier : false  // Disable bezier curve to get straight lines
+        
       };
     
 
 
     return (
         <SafeAreaView>
-            <View>
-                <Text style={{textAlign:"center",color:"#000"}}>ECG GRAPH</Text>
+            <View style={HealthMonitorStyles.ecgContainer} >
+                <Text style={HealthMonitorStyles.ecgTitle}>ECG GRAPH</Text>
+                
                   { connectedDevice ? (<LineChart
                     data={chartData}
-                    width={Dimensions.get('window').width}
+                    width={Dimensions.get('window').width * 0.95}
                     height={220}
+                    withShadow={false}
                     yAxisInterval={1}
                     chartConfig={chartConfig}
+                    bezier
                     style={{
                         marginVertical: 8,
                         borderRadius: 16,
