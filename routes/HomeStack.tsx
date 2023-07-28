@@ -1,37 +1,44 @@
-import { createStackNavigator } from "react-navigation-stack"
+import { HeaderTitle, createStackNavigator } from "react-navigation-stack"
 import Home from "../screens/Home"
 import Bluetooth from "../screens/Bluetooth"
 import { createAppContainer } from "react-navigation"
 import HealthMonitor from "../screens/HeallthMonitor"
 import Profile from "../screens/Profile"
-
+import { COLORS } from "../constants/Theme"
+import { useEffect } from "react"
+import SplashScreen from "react-native-splash-screen"
 
 
 
 
 const screens = {
+    
+    
     Home : {
         screen : Home,
         navigationOptions : {
-            title : "Login"
+            title : "LOGIN"
         }
     },
     Profile : {
         screen : Profile,
+            
         navigationOptions : {
-            title : "Profile"
+            title : "USER PROFILE",
+            
+            
         }
     },
     Bluetooth : {
         screen : Bluetooth,
         navigationOptions : {
-            title : "Connection"
+            title : "CONNECTION"
         }
     },
     HealthMonitor : {
         screen : HealthMonitor,
         navigationOptions : {
-            title : "Health Monitor"
+            title : "HEALTH MONITOR"
         }
     }
 }
@@ -40,7 +47,15 @@ const screens = {
 
 const HomeStack = createStackNavigator(screens,{
     defaultNavigationOptions : {
-        headerStyle : { backgroundColor : "#eee" , height : 60}
+        headerStyle : { backgroundColor : COLORS.primary , height : 60,},
+        headerTintColor : '#fff',
+        headerTitleStyle :{
+            fontWeight:"bold"
+        }
+        
+
+
+
     }
 })
 
