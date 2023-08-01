@@ -7,7 +7,9 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView,
+  View
 } from 'react-native';
 import {Device} from 'react-native-ble-plx';
 import { COLORS } from '../constants/Theme';
@@ -67,12 +69,17 @@ const DeviceModal: FC<DeviceModalProps> = props => {
         <Text style={modalStyle.modalTitleText}>
           Tap on a device to connect
         </Text>
-        <FlatList
+        
+          
+          <FlatList
           contentContainerStyle={modalStyle.modalFlatlistContiner}
           data={devices}
           renderItem={renderDeviceModalListItem}
           ListEmptyComponent={<ActivityIndicator size="large" color="#000" />}
         />
+          
+        
+       
       </SafeAreaView>
     </Modal>
   );
