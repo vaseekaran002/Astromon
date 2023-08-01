@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@dpwiese/react-native-canvas-charts": "^0.0.4",
     "@react-native-async-storage/async-storage": "^1.19.1",
     "@react-navigation/native": "^6.1.7",
     "formik": "^2.4.2",
@@ -28,6 +29,7 @@
     "react-native-screens": "^3.22.1",
     "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "^13.10.0",
+    "react-native-webview": "^13.3.0",
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4",
     "yup": "^1.2.0"
