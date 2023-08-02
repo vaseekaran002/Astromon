@@ -41,7 +41,7 @@ function memorySizeOf(obj) {
 
   const obi = {
     ecg : Array.from({
-        length: 12000
+        length: 7000
     }, () => Math.floor(Math.random() * 10)),
     spo02 : Array.from({
         length: 3

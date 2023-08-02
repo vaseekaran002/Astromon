@@ -3445,6 +3445,11 @@ event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   resolved "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
+eventemitter3@~4.0.7:
+  version "4.0.7"
+  resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-4.0.7.tgz"
+  integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
+
 execa@^5.0.0:
   version "5.1.1"
   resolved "https://registry.npmjs.org/execa/-/execa-5.1.1.tgz"
@@ -4815,6 +4820,11 @@ kleur@^3.0.3:
   resolved "https://registry.npmjs.org/kleur/-/kleur-3.0.3.tgz"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
+"konva@>= 8.3.10 < 9":
+  version "8.4.3"
+  resolved "https://registry.npmjs.org/konva/-/konva-8.4.3.tgz"
+  integrity sha512-ARqdgAbdNIougRlOKvkQwHlGhXPRBV4KvhCP+qoPpGoVQwwiJe4Hkdu4HHdRPb9rGUp04jDTAxBzEwBsE272pg==
+
 leven@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/leven/-/leven-3.1.0.tgz"
@@ -5700,6 +5710,13 @@ paths-js@^0.4.10:
   version "0.4.11"
   resolved "https://registry.npmjs.org/paths-js/-/paths-js-0.4.11.tgz"
   integrity sha512-3mqcLomDBXOo7Fo+UlaenG6f71bk1ZezPQy2JCmYHy2W2k5VKpP+Jbin9H0bjXynelTbglCqdFhSEkeIkKTYUA==
+
+peaks.js@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/peaks.js/-/peaks.js-2.1.0.tgz"
+  integrity sha512-oWsqrHckPv9w1yXIciX81kVXPZSFifGhETmR1bLFbV7KlqPRCYvLVaTpHc6Nl+Ogps0BMRvCnrQLEYCWBKA0uA==
+  dependencies:
+    eventemitter3 "~4.0.7"
 
 picocolors@^1.0.0:
   version "1.0.0"
@@ -7173,6 +7190,11 @@ warn-once@^0.1.0:
   version "0.1.1"
   resolved "https://registry.npmjs.org/warn-once/-/warn-once-0.1.1.tgz"
   integrity sha512-VkQZJbO8zVImzYFteBXvBOZEl1qL175WH8VmZcxF2fZAoudNhNDvHi+doCaAEdU2l2vtcIwa2zn0QK5+I1HQ3Q==
+
+"waveform-data@>= 4.3.0 < 5":
+  version "4.3.0"
+  resolved "https://registry.npmjs.org/waveform-data/-/waveform-data-4.3.0.tgz"
+  integrity sha512-gddZgTV1dM8Mfaqn+mCJjwTAc7O/GbX2LgOrijRCHEGC60ZVdd/qTzrgEcCE5MfBoBPgwQ85huy1icSf5IZY5Q==
 
 wcwidth@^1.0.1:
   version "1.0.1"

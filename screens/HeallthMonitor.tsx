@@ -1,15 +1,11 @@
 import React, { useRef } from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView, ScrollView } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { useEffect } from 'react';
-import { useState } from 'react';
-import ecgdata from './ecgdata.json'
 import { bleManager } from '../constants/BleManager';
 import { Device } from 'react-native-ble-plx';
 import base64 from 'react-native-base64';
-import { Chart } from "@dpwiese/react-native-canvas-charts/ChartJs";
 import ChartJs, { SetData } from '../components/Chart/Chart';
-// Circular buffer class to manage the data points
 
 
 
@@ -37,9 +33,6 @@ const HealthMonitor = (props : HealthMonitorProps) => {
 
     useEffect(() => {
       connecttodevice(devices[0])
-      
-    
-
     },[])
 
 
@@ -62,10 +55,11 @@ const HealthMonitor = (props : HealthMonitorProps) => {
                 return -1;
               }
               const rawData = base64.decode(characteristic.value);
-            
-              setDataRef.current?.setData(parseInt(rawData))
-            },
+  
+              setDataRef.current?.setData(parseFloat(rawData))
+            }
           );
+         
         } else {
           console.log('No Device Connected');
         }
@@ -120,17 +114,13 @@ const config = {
       scales: {
           x: {
               type: 'category',
-
-              ticks: {
-                  stepSize: 10
-              },
               grid: {
                   // display: false
               }
           },
           y: {
               min : 0,
-              max : 4000,
+              max : 5000,
               grid: {
                   // display: false
               }
@@ -140,51 +130,15 @@ const config = {
 
 };
 
-  
-      // const chartConfig = {
-      //   type: "line",
-      //   data: {
-      //     datasets: [
-      //       {
-      //         label: [],
-      //         backgroundColor: "rgb(224, 110, 60)",
-      //         borderColor: "rgb(224, 110, 60)",
-      //         data: [],
-      //         fill: false,
-      //         pointRadius: 0,
-      //         lineTension: 0.1,
-      //         borderJoinStyle: "round",
-      //       },
-      //     ],
-      //   },
-        
-      //   responsive: true,
-      //   plugins: {
-      //       title: {
-      //           display: true,
-      //           text: 'Chart.js'
-      //       }
-      //   },
-      //   scales: {
-      //       x: {
-      //           display: true
-      //       },
-      //       y: {
-      //           display: true
-      //       }
-      //   }
-    
-      // };
-      
-
-
-      
     
 
 
     return (
         <SafeAreaView>
-            <ChartJs config={config} ref={setDataRef} />
+          <ScrollView    >
+          <ChartJs config={config} ref={setDataRef} />
+          </ScrollView>
+            
         </SafeAreaView>
     )
 
