@@ -1,19 +1,13 @@
-import {Dimensions, StyleSheet } from 'react-native'
+import {Dimensions, StyleSheet, useWindowDimensions } from 'react-native'
 import { StyleProp, View,ViewStyle } from "react-native";
 import { WebView } from "react-native-webview";
 import { useImperativeHandle ,forwardRef } from 'react';
 import { ReactElement } from 'react';
 
-let dataarr : number[] = []
-let lbl : string[] = []
+var databuff : number[] = [1]
+var lables : String[] = ["a"] 
 
 
-const styles = StyleSheet.create({
-    webview: {
-      height: 400,
-      width : Dimensions.get("screen").width ,
-    },
-  });
 
   export type SetData = {
     setData: (data:number) => void;
@@ -34,9 +28,21 @@ export const ChartJs = forwardRef(
   const addChart = (config: any): void => {
     webref?.injectJavaScript(`const canvasEl = document.createElement("canvas");
       canvasEl.height = 200;
+      canvasEl.style="display: flex;justify-content: center;align-items: center;"
       document.body.appendChild(canvasEl);
       window.canvasLine = new Chart(canvasEl.getContext('2d'), ${JSON.stringify(config)});true;`);
   };
+
+
+  const styles = StyleSheet.create({
+    webview: {
+      height: useWindowDimensions().height ,
+      width : useWindowDimensions().width  ,
+
+    },
+   
+  });
+
 
 
   const setData = (dataSets : number) => {
@@ -44,19 +50,24 @@ export const ChartJs = forwardRef(
   
     var today = new Date();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        if(dataarr.length <= 109 && lbl.length <= 109){
-            dataarr.push(dataSets)
-            lbl.push(time)
-        }
-        else{
-            dataarr.splice(0,2,dataSets)
-            lbl.splice(0,2,time)
-        }
-  
-    if (dataarr && lbl) {
+      
+   
      
-        webref?.injectJavaScript(`window.canvasLine.config.data.datasets[0].data = ${JSON.stringify(dataarr)};
-        window.canvasLine.config.data.labels = ${JSON.stringify(lbl)};
+
+      if(databuff.length <= 400){
+        databuff.push(dataSets)
+        lables.push(time)
+      }else{
+        databuff.shift()
+        databuff.push(dataSets)
+        lables.shift()
+        lables.push(time)
+      }
+
+    if (databuff) {
+     
+        webref?.injectJavaScript(`window.canvasLine.config.data.datasets[0].data = ${JSON.stringify(databuff)};
+        window.canvasLine.config.data.labels = ${JSON.stringify(lables)};
         window.canvasLine.update();`);
      
     }
@@ -70,7 +81,6 @@ export const ChartJs = forwardRef(
     
          <View style={styles.webview }>
         <WebView
-        
           originWhitelist={["*"]}
           ref={(r): WebView<{ originWhitelist: string[]; ref: unknown; source: { uri : string } }> | null =>
             (webref = r)
@@ -81,7 +91,7 @@ export const ChartJs = forwardRef(
           onLoadEnd={(): void => {
             addChart(props.config);
           }}
-          style={styles.webview}
+        
         />
       </View>
     
