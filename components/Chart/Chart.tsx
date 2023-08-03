@@ -27,8 +27,7 @@ export const ChartJs = forwardRef(
   
   const addChart = (config: any): void => {
     webref?.injectJavaScript(`const canvasEl = document.createElement("canvas");
-      canvasEl.height = 200;
-      canvasEl.style="display: flex;justify-content: center;align-items: center;"
+      canvasEl.height = 100;
       document.body.appendChild(canvasEl);
       window.canvasLine = new Chart(canvasEl.getContext('2d'), ${JSON.stringify(config)});true;`);
   };
@@ -36,7 +35,7 @@ export const ChartJs = forwardRef(
 
   const styles = StyleSheet.create({
     webview: {
-      height: useWindowDimensions().height ,
+      height: Dimensions.get("screen").height ,
       width : useWindowDimensions().width  ,
 
     },
@@ -79,7 +78,7 @@ export const ChartJs = forwardRef(
 
   return (
     
-         <View style={styles.webview }>
+         <View   style={styles.webview } >
         <WebView
           originWhitelist={["*"]}
           ref={(r): WebView<{ originWhitelist: string[]; ref: unknown; source: { uri : string } }> | null =>
@@ -91,7 +90,7 @@ export const ChartJs = forwardRef(
           onLoadEnd={(): void => {
             addChart(props.config);
           }}
-        
+          style={styles.webview }
         />
       </View>
     
