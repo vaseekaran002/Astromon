@@ -8,35 +8,30 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  ScrollView,
-  View
 } from 'react-native';
 import {Device} from 'react-native-ble-plx';
 import { COLORS } from '../constants/Theme';
 
 type DeviceModalListItemProps = {
   item: ListRenderItemInfo<Device>;
-  connectToPeripheral: (device: Device) => void;
   closeModal: () => void;
 };
 
 type DeviceModalProps = {
   devices: Device[];
   visible: boolean;
-  connectToPeripheral: (device: Device) => void;
   closeModal: () => void;
 };
 
 const DeviceModalListItem: FC<DeviceModalListItemProps> = props => {
-  const {item, connectToPeripheral, closeModal} = props;
-  const connectAndCloseModal = useCallback(() => {
-    //connectToPeripheral(item.item);
+  const {item,  closeModal} = props;
+  const CloseModal = useCallback(() => {
     closeModal();
-  }, [closeModal, connectToPeripheral, item.item]);
+  }, [closeModal, item.item]);
 
   return (
     <TouchableOpacity
-      onPress={connectAndCloseModal}
+      onPress={CloseModal}
       style={modalStyle.ctaButton}>
       <Text style={modalStyle.ctaButtonText}>{item.item.name}</Text>
     </TouchableOpacity>
@@ -44,19 +39,18 @@ const DeviceModalListItem: FC<DeviceModalListItemProps> = props => {
 };
 
 const DeviceModal: FC<DeviceModalProps> = props => {
-  const {devices, visible, connectToPeripheral, closeModal} = props;
+  const {devices, visible,  closeModal} = props;
 
   const renderDeviceModalListItem = useCallback(
     (item: ListRenderItemInfo<Device>) => {
       return (
         <DeviceModalListItem
           item={item}
-          connectToPeripheral={connectToPeripheral}
           closeModal={closeModal}
         />
       );
     },
-    [closeModal, connectToPeripheral],
+    [closeModal],
   );
 
   return (

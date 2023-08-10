@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import { SafeAreaView, ScrollView } from 'react-native'
+import React, { useRef, useState } from 'react'
+import { SafeAreaView, ScrollView, Text } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { useEffect } from 'react';
 import { bleManager } from '../constants/BleManager';
@@ -9,12 +9,15 @@ import ChartJs, { SetData } from '../components/Chart/Chart';
 
 
 
-const HEART_RATE_UUID = '54d29f5d-1023-4fca-a692-c9ec3c33a6b9';
-const HEART_RATE_CHARACTERISTIC = 'd80483ec-a402-45cb-a382-62cec74ddc3f';
 
+const ECG_UUID = '54d29f5d-1023-4fca-a692-c9ec3c33a6b9';
+const ECG_CHARACTERISTIC = 'd80483ec-a402-45cb-a382-62cec74ddc3f';
 
-
-
+const P2P_UUID = "c8f5dcc6-b70c-4eba-bd90-2058cb2718bb"
+const SPO2_CHARACTERISTIC = 'e3a352b2-d542-4152-ac7f-f90840de0bbc';
+const SYS_CHAR = 'd34a388e-f671-4f79-b72e-ee80dba7c507';
+const DIA_CHAR = 'f0ee54d7-d1e3-4312-968f-40c8345c87a7';
+const HR_CHAR = "54a7fe1d-ea44-4be1-8c1a-2d30ad136349"
 export interface HealthMonitorProps {
     navigation: NavigationScreenProp<any,any>
   };
@@ -24,30 +27,70 @@ const HealthMonitor = (props : HealthMonitorProps) => {
    
   const devices = props.navigation.getParam('devices')
 
-  
-
+  const [hr ,setHr]  = useState<number>(0)
+  const [sys , setSys] = useState<number>(0)
+  const [dia  , setDia] = useState<number>(0)
+  const [spo2 , setSpo2] = useState<number>(0)
 
   
   const setDataRef = useRef<SetData>();
 
 
     useEffect(() => {
-      connecttodevice(devices[0])
+      // if(devices[0].serviceUUIDs[0] === ECG_UUID){
+      //   connecttoecg(devices[0])
+      // }else{
+      //   connecttop2p(devices[0])
+      // }
+      // if(devices[1].serviceUUIDs[0] === P2P_UUID){
+      //   connecttop2p(devices[1])
+      // }else{
+      //   connecttoecg(devices[1])
+      // }
+      connecttoecg(devices[0])
+      
     },[])
 
 
-    const connecttodevice = async (device: Device) => {
+
+    const connecttoecg = async (device: Device) => {
+      
+      const deviceConnection = await bleManager.connectToDevice(device.id);
+      await deviceConnection.discoverAllServicesAndCharacteristics();
+      bleManager.stopDeviceScan();
+      if (deviceConnection) {
+        console.log("chaaaarrrr",await deviceConnection.services())
+        deviceConnection.monitorCharacteristicForService(
+        ECG_UUID,
+         ECG_CHARACTERISTIC,
+          (error, characteristic) => {
+           
+            if (error) {
+              console.log(error);
+              return -1;
+            } else if (!characteristic?.value) {
+              return -1;
+            }
+            const rawData = base64.decode(characteristic.value);
+            setDataRef.current?.setData(parseFloat(rawData))
+          }
+          
+        );
+      }}
+
+
+    const connecttop2p = async (device: Device) => {
+      
         const deviceConnection = await bleManager.connectToDevice(device.id);
         await deviceConnection.discoverAllServicesAndCharacteristics();
         bleManager.stopDeviceScan();
-      
         if (deviceConnection) {
-         
+          console.log("chaaaarrrr",await deviceConnection.services())
           deviceConnection.monitorCharacteristicForService(
-           HEART_RATE_UUID,
-            HEART_RATE_CHARACTERISTIC,
+           P2P_UUID,
+           HR_CHAR,
             (error, characteristic) => {
-          
+             
               if (error) {
                 console.log(error);
                 return -1;
@@ -55,11 +98,63 @@ const HealthMonitor = (props : HealthMonitorProps) => {
                 return -1;
               }
               const rawData = base64.decode(characteristic.value);
-  
-              setDataRef.current?.setData(parseFloat(rawData))
+              setHr(parseInt(rawData))
+              //setDataRef.current?.setData(parseFloat(rawData))
             }
+            
           );
          
+          deviceConnection.monitorCharacteristicForService(
+            P2P_UUID,
+            SYS_CHAR,
+             (error, characteristic) => {
+              
+               if (error) {
+                 console.log(error);
+                 return -1;
+               } else if (!characteristic?.value) {
+                 return -1;
+               }
+               const rawData = base64.decode(characteristic.value);
+               setSys(parseInt(rawData))
+               //setDataRef.current?.setData(parseFloat(rawData))
+             }
+             
+           );
+           deviceConnection.monitorCharacteristicForService(
+            P2P_UUID,
+            DIA_CHAR,
+             (error, characteristic) => {
+              
+               if (error) {
+                 console.log(error);
+                 return -1;
+               } else if (!characteristic?.value) {
+                 return -1;
+               }
+               const rawData = base64.decode(characteristic.value);
+               setDia(parseInt(rawData))
+               //setDataRef.current?.setData(parseFloat(rawData))
+             }
+             
+           );
+           deviceConnection.monitorCharacteristicForService(
+            P2P_UUID,
+            SPO2_CHARACTERISTIC,
+             (error, characteristic) => {
+              
+               if (error) {
+                 console.log(error);
+                 return -1;
+               } else if (!characteristic?.value) {
+                 return -1;
+               }
+               const rawData = base64.decode(characteristic.value);
+               setSpo2(parseInt(rawData))
+               //setDataRef.current?.setData(parseFloat(rawData))
+             }
+             
+           );
         } else {
           console.log('No Device Connected');
         }
@@ -68,77 +163,14 @@ const HealthMonitor = (props : HealthMonitorProps) => {
 
       }
     
-    
-const data = {
-  
-  labels: ["dd"],
-  datasets: [{
-    backgroundColor: "rgb(224, 110, 60)",
-              borderColor: "rgb(224, 110, 60)",
-              data: [],
-              fill: false,
-              pointRadius: 0,
-              lineTension: 0.05,
-              borderWidth : 1
-  }]
-};
-
-let delayBetweenPoints : number = 0
-    
-const config = {
-  type: 'line',
-  data: data,
-  options: {
-      animation: {
-          x: {
-              type: 'number',
-              easing: 'linear',
-              duration: delayBetweenPoints,
-              from: NaN, // the point is initially skipped
-             
-          },
-          y: {
-              type: 'number',
-              easing: 'linear',
-              duration: delayBetweenPoints,
-              
-            
-          }
-      },
-      interaction: {
-          intersect: false
-      },
-      plugins: {
-          legend: false
-      },
-      scales: {
-          x: {
-              type: 'category',
-              grid: {
-                  // display: false
-              }
-          },
-          y: {
-              min : 0,
-              max : 5000,
-              grid: {
-                  // display: false
-              }
-          }
-      }
-  }
-
-};
-
-    
 
 
     return (
         <SafeAreaView>
           <ScrollView    >
-          <ChartJs config={config} ref={setDataRef} />
+          <ChartJs  ref={setDataRef} />
           </ScrollView>
-            
+            <Text style={{color:"black"}}>spo2 : {spo2}  hr : {hr}  sys : {sys} Dia : {dia}</Text>
         </SafeAreaView>
     )
 
