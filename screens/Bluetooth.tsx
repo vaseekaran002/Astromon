@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import DeviceModal from '../components/DeviceConnectionModal';
 import useBLE from '../hooks/useBLE';
-import { LineChart } from 'react-native-chart-kit';
 import { NavigationScreenProp } from 'react-navigation';
 import { COLORS } from '../constants/Theme';
 
@@ -22,10 +21,6 @@ const Bluetooth = (props : HomeScreenProps) => {
     requestPermission,
     scanForPeripherals,
     allDevices,
-    connectToDevice,
-    connectedDevice,
-    heartRate,
-    disconnectFromDevice
    
   } = useBLE();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -74,7 +69,6 @@ const Bluetooth = (props : HomeScreenProps) => {
     <DeviceModal
       closeModal={hideModal}
       visible={isModalVisible}
-      connectToPeripheral={connectToDevice}
       devices={allDevices}
     />
   </SafeAreaView>

@@ -54,6 +54,17 @@ function memorySizeOf(obj) {
     }, () => Math.floor(Math.random() * 10))
   }
 
-  let sizeinbytes = memorySizeOf(obi)
+  const arrr = Array.from({length : 500 }, () => Math.floor(Math.random() * 1000))
+  //let sizeinbytes = memorySizeOf(obi)
 
-  console.log(sizeinbytes)
+  var today = new Date();
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds();
+  console.log(time)
+
+  
+  var strfied = JSON.stringify(arrr)
+
+
+  var today1 = new Date();
+  var time1 = today1.getHours() + ":" + today1.getMinutes() + ":" + today1.getSeconds() + ":" + today1.getMilliseconds();
+  console.log(time1)
