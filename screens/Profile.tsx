@@ -22,7 +22,7 @@ interface FormValues {
   
 }
 
-const App = (props: HomeScreenProps) => {
+const Profile = (props: HomeScreenProps) => {
   const initialValues: FormValues = {
     name: '',
     age: '',
@@ -217,6 +217,7 @@ const App = (props: HomeScreenProps) => {
                 />
              
             </View>
+            </ScrollView>
             <View style={Styles.btnscontainter}>
               { (
                 <TouchableOpacity onPress={() => {setIsViewOnly(false)
@@ -238,21 +239,13 @@ const App = (props: HomeScreenProps) => {
                 <Text style={Styles.bluetoothbtntxt}>Delete Profile</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={Styles.bluetoothbtncontainer}
-                onPress={() => {
-                  props.navigation.navigate('Bluetooth');
-                }}
-              >
-
-                <Text style={Styles.bluetoothbtntxt}>Monitor health</Text>
-              </TouchableOpacity>
+              
             </View>
-            </ScrollView>
+            
           </KeyboardAvoidingView>
         )}
       </Formik>
-
+      
     
     </View>
   );
@@ -261,4 +254,4 @@ const App = (props: HomeScreenProps) => {
               };
 
 
-export default App;
+export default Profile;
