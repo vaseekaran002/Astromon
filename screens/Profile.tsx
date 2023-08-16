@@ -6,6 +6,9 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Styles from '../styles/ProfileStyle';
 import { NavigationScreenProp } from 'react-navigation';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { COLORS } from '../constants/Theme';
+import Styless from '../styles/HomeStyles';
 
 export interface HomeScreenProps {
   navigation: NavigationScreenProp<any, any>;
@@ -78,26 +81,6 @@ const Profile = (props: HomeScreenProps) => {
       setIsLoading(false);
     }
   };
-  const handleDeleteProfile = async () => {
-    try {
-      await AsyncStorage.removeItem('userProfile');
-      formValues.age=""
-      formValues.name=""
-      formValues.gender=""
-      formValues.deviceid=""
-      formValues.bloodgroup=""
-      formValues.height=""
-      formValues.weight=""
-
-
-      setFormValues(formValues);
-      setIsViewOnly(true); 
-      
-      console.log('User profile data deleted from AsyncStorage!');
-    } catch (error) {
-      console.error('Error deleting user profile data:', error);
-    }
-  };
   
   const handleSubmit = async (values: FormValues) => {
     console.log(values);
@@ -119,7 +102,7 @@ const Profile = (props: HomeScreenProps) => {
  return (
     <View style={Styles.container}>
        
-    
+    <Text style={Styles.textt}>MY PROFILE</Text>
      
       <Formik initialValues={formValues} validationSchema={validation} onSubmit={handleSubmit}>
         {({ handleChange, handleSubmit, values, errors, }) => (
@@ -132,7 +115,7 @@ const Profile = (props: HomeScreenProps) => {
                   style={Styles.textinpt}
                   label="Name"
                   placeholder="Enter name"
-                  placeholderTextColor="#A9A9A9"
+                  placeholderTextColor={COLORS.placeholder}
                   onChangeText={handleChange('name')}
                   value={values.name}
                   editable={isViewOnly}
@@ -143,7 +126,7 @@ const Profile = (props: HomeScreenProps) => {
                   style={Styles.textinpt}
                   label="Age"
                   placeholder="Enter age"
-                  placeholderTextColor="#A9A9A9"
+                  placeholderTextColor={COLORS.placeholder}
                   onChangeText={handleChange('age')}
                   value={values.age}
                   keyboardType="numeric"
@@ -155,7 +138,7 @@ const Profile = (props: HomeScreenProps) => {
                   style={Styles.textinpt}
                   label="DeviceID"
                   placeholder="Enter deviceid"
-                  placeholderTextColor="#A9A9A9"
+                  placeholderTextColor={COLORS.placeholder}
                   onChangeText={handleChange('deviceid')}
                   value={values.deviceid}
                   keyboardType="numeric"
@@ -167,7 +150,7 @@ const Profile = (props: HomeScreenProps) => {
                   style={Styles.textinpt}
                   label="Bloodgroup"
                   placeholder="Enter bloodgroup"
-                  placeholderTextColor="#A9A9A9"
+                  placeholderTextColor={COLORS.placeholder}
                   onChangeText={handleChange('bloodgroup')}
                   value={values.bloodgroup}
                   editable={isViewOnly}
@@ -197,7 +180,7 @@ const Profile = (props: HomeScreenProps) => {
                   style={Styles.textinpt}
                   label="Height"
                   placeholder="Enter height"
-                  placeholderTextColor="#A9A9A9"
+                  placeholderTextColor={COLORS.placeholder}
                   onChangeText={handleChange('height')}
                   value={values.height}
                   keyboardType="numeric"
@@ -209,7 +192,7 @@ const Profile = (props: HomeScreenProps) => {
                   style={Styles.textinpt}
                   label="Weight"
                   placeholder="Enter weight"
-                  placeholderTextColor="#A9A9A9"
+                  placeholderTextColor={COLORS.placeholder}
                   onChangeText={handleChange('weight')}
                   value={values.weight}
                   keyboardType="numeric"
@@ -219,26 +202,26 @@ const Profile = (props: HomeScreenProps) => {
             </View>
             </ScrollView>
             <View style={Styles.btnscontainter}>
-              { (
-                <TouchableOpacity onPress={() => {setIsViewOnly(false)
-                  handleSubmit()}} style={Styles.appbtncontainer}>
+              {isViewOnly ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsViewOnly(false);
+                    handleSubmit();
+                  }}
+                  style={Styles.appbtncontainer}
+                > 
                   <Text style={Styles.appbtntext}>Submit</Text>
                 </TouchableOpacity>
+               
+              ) : (
+                
+                 <TouchableOpacity
+                 style={Styles.approundbtn}
+                 onPress={() => setIsViewOnly(true)}
+               >
+                 <Icon name="create-outline" size={30} color="white" />
+               </TouchableOpacity>
               )}
-
-              <TouchableOpacity
-                style={Styles.appbtncontainer}
-                onPress={() => setIsViewOnly(true)}
-              >
-                <Text style={Styles.appbtntext} >Edit</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={Styles.bluetoothbtncontainer}
-                onPress={handleDeleteProfile}
-              >
-                <Text style={Styles.bluetoothbtntxt}>Delete Profile</Text>
-              </TouchableOpacity>
-
               
             </View>
             

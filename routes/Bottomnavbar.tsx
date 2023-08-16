@@ -6,13 +6,14 @@ import Bluetooth from '../screens/Bluetooth';
 import Profile from '../screens/Profile';
 import Home from '../screens/Home';
 import MonitorEntry from './../components/MonitorEntry';
+import { COLORS } from '../constants/Theme';
 
 const Tab = createBottomTabNavigator();
 
 const BottomNavigationBar = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator 
+      <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
@@ -26,6 +27,10 @@ const BottomNavigationBar = () => {
             }
             return <Icon name={iconName} size={size} color={color} />;
           },
+          tabBarStyle: { backgroundColor: 'white' }, 
+          tabBarItemStyle: { borderTopWidth: 1, borderColor: 'lightgray' }, 
+          tabBarActiveTintColor:COLORS.primary, 
+          tabBarInactiveTintColor: 'gray',
         })}
       >
         <Tab.Screen name="Home" component={Home} />

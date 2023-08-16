@@ -18,6 +18,14 @@ errortxt:{
 color:"red"
 
 },
+txt:{
+  color:COLORS.primary,
+  fontWeight:`900`,
+  fontSize:40,
+  marginLeft:90,
+  marginTop:250
+},
+
     tittle:{
         fontSize:30,
         color:COLORS.primary,
@@ -74,6 +82,18 @@ display:"flex"
         margin:5
       
 
+    },
+    approundbtn:{
+     
+        elevation: 8,
+        backgroundColor: COLORS.primary,
+        borderRadius: 50, // Half of the width or height for a circular button
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        position: 'absolute', // Use absolute positioning
+        bottom: 10, // Adjust this value for spacing from the bottom
+        right: 10, // Adjust this value for spacing from the right
+      
     },
     appbtntext:{
         fontSize: 18,
