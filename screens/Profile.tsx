@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, ImageBackground } from 'react-native';
 import { RadioButton, TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Formik } from 'formik';
@@ -9,6 +9,8 @@ import { NavigationScreenProp } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../constants/Theme';
 import Styless from '../styles/HomeStyles';
+const bgimg = require('./assest/bg.png')
+
 
 export interface HomeScreenProps {
   navigation: NavigationScreenProp<any, any>;
@@ -51,6 +53,15 @@ const Profile = (props: HomeScreenProps) => {
   const [formValues, setFormValues] = useState<FormValues>(initialValues);
   const [isViewOnly, setIsViewOnly] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [touchedInputs, setTouchedInputs] = useState({
+    name: false,
+    age: false,
+    deviceid: false,
+    bloodgroup : false,
+    gender : false,
+    height : false,
+    weight : false
+  });
 
   useEffect(() => {
     
@@ -94,15 +105,35 @@ const Profile = (props: HomeScreenProps) => {
       console.error('Error storing form values in AsyncStorage:', error);
     }
   };
+  const handleChange = (field: string) => (value: string) => {
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [field]: value,
+    }));
+    
+    setTouchedInputs((prevTouchedInputs) => ({
+      ...prevTouchedInputs,
+      [field]: true,
+    }));
+  };
 
 
  if(isLoading){ 
   return null}
  
  return (
+  
+  <ImageBackground
+  source={bgimg}
+  resizeMode="cover"
+  style={{
+    width: '100%',
+    height: '100%', 
+  }}
+>
     <View style={Styles.container}>
        
-    <Text style={Styles.textt}>MY PROFILE</Text>
+   
      
       <Formik initialValues={formValues} validationSchema={validation} onSubmit={handleSubmit}>
         {({ handleChange, handleSubmit, values, errors, }) => (
@@ -110,7 +141,7 @@ const Profile = (props: HomeScreenProps) => {
            <ScrollView>
             <View>
               
-                <Text style={Styles.errortxt}>{errors.name}</Text>
+                <Text style={Styles.errortxt}>{touchedInputs.name && errors.name}</Text>
                 <TextInput
                   style={Styles.textinpt}
                   label="Name"
@@ -121,7 +152,7 @@ const Profile = (props: HomeScreenProps) => {
                   editable={isViewOnly}
                 />
 
-                <Text style={Styles.errortxt}>{errors.age}</Text>
+                <Text style={Styles.errortxt}>{touchedInputs.age && errors.age}</Text>
                 <TextInput
                   style={Styles.textinpt}
                   label="Age"
@@ -133,7 +164,7 @@ const Profile = (props: HomeScreenProps) => {
                   editable={isViewOnly}
                 />
 
-                <Text style={Styles.errortxt}>{errors.deviceid}</Text>
+                <Text style={Styles.errortxt}>{touchedInputs.deviceid && errors.deviceid}</Text>
                 <TextInput
                   style={Styles.textinpt}
                   label="DeviceID"
@@ -145,7 +176,7 @@ const Profile = (props: HomeScreenProps) => {
                   editable={isViewOnly}
                 />
 
-                <Text style={Styles.errortxt}>{errors.bloodgroup}</Text>
+                <Text style={Styles.errortxt}>{touchedInputs.bloodgroup && errors.bloodgroup}</Text>
                 <TextInput
                   style={Styles.textinpt}
                   label="Bloodgroup"
@@ -175,7 +206,7 @@ const Profile = (props: HomeScreenProps) => {
                   </RadioButton.Group>
                 </View>
 
-                <Text style={Styles.errortxt}>{errors.height}</Text>
+                <Text style={Styles.errortxt}>{touchedInputs.height && errors.height}</Text>
                 <TextInput
                   style={Styles.textinpt}
                   label="Height"
@@ -187,7 +218,7 @@ const Profile = (props: HomeScreenProps) => {
                   editable={isViewOnly}
                 />
 
-                <Text style={Styles.errortxt}>{errors.weight}</Text>
+                <Text style={Styles.errortxt}>{touchedInputs.weight&& errors.weight}</Text>
                 <TextInput
                   style={Styles.textinpt}
                   label="Weight"
@@ -201,17 +232,28 @@ const Profile = (props: HomeScreenProps) => {
              
             </View>
             </ScrollView>
+           
             <View style={Styles.btnscontainter}>
               {isViewOnly ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    setIsViewOnly(false);
-                    handleSubmit();
-                  }}
-                  style={Styles.appbtncontainer}
-                > 
-                  <Text style={Styles.appbtntext}>Submit</Text>
-                </TouchableOpacity>
+              <TouchableOpacity
+              onPress={() => {
+                setIsViewOnly(false);
+                setTouchedInputs((prevTouchedInputs) => ({
+                  ...prevTouchedInputs,
+                  name: true,
+                  age: true,
+                  deviceid: true,
+                  bloodgroup: true,
+                  gender: true,
+                  height: true,
+                  weight: true,
+                }));
+                handleSubmit();
+              }}
+              style={Styles.appbtncontainer}
+            >
+              <Text style={Styles.appbtntext} >Submit</Text>
+            </TouchableOpacity>
                
               ) : (
                 
@@ -229,8 +271,11 @@ const Profile = (props: HomeScreenProps) => {
         )}
       </Formik>
       
+      
+      
     
     </View>
+    </ImageBackground>
   );
         
 

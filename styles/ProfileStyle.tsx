@@ -33,6 +33,12 @@ txt:{
         alignItems: 'center',
         justifyContent:'center'
     },
+    shadowProp: {
+      shadowColor: '#171717',
+      shadowOffset: {width: 0, height: 3},
+      shadowOpacity: 0.4,
+      shadowRadius: 2,
+    },
    
     container:{
         flex: 1,
@@ -45,12 +51,11 @@ txt:{
       
     },
     textt:{
-        
-        fontSize: 20,
-        font : FONT.bold,
-        color :'black',
-    
-    },
+      "fontSize": 20,
+      "fontFamily": "DMBold",
+      "color": "black"
+    }
+    ,
     btnscontainter:{
 justifyContent:"space-between",
 display:"flex"
