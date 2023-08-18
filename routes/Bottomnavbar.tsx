@@ -7,13 +7,17 @@ import Profile from '../screens/Profile';
 import Home from '../screens/Home';
 import MonitorEntry from './../components/MonitorEntry';
 import { COLORS } from '../constants/Theme';
+import { StatusBar, StyleSheet } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 const BottomNavigationBar = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
+    
+    <NavigationContainer >
+      <StatusBar backgroundColor={COLORS.primary}/>
+      <Tab.Navigator 
+      
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
@@ -21,18 +25,28 @@ const BottomNavigationBar = () => {
             if (route.name === 'Home') {
               iconName = focused ? 'home' : 'home-outline';
             } else if (route.name === 'Bluetooth') {
-              iconName = 'bluetooth';
+              iconName = focused?'bluetooth':'bluetooth-outline';
             } else if (route.name === 'Profile') {
-              iconName = 'person';
+              iconName = focused?'person-circle' : 'person-circle-outline';
             }
-            return <Icon name={iconName} size={size} color={color} />;
+            return <Icon name={iconName} size={size} color={"#36454F"} />;
           },
-          tabBarStyle: { backgroundColor: 'white' }, 
-          tabBarItemStyle: { borderTopWidth: 1, borderColor: 'lightgray' }, 
+          tabBarStyle: { backgroundColor: '#C2E9FB',
+                        bottom:10,
+                        left:20,
+                         right:20,
+                        
+                      borderRadius:15,
+                    height:60, 
+                  position:'absolute',
+                  ...styles.shadow}, 
+           
           tabBarActiveTintColor:COLORS.primary, 
           tabBarInactiveTintColor: 'gray',
+          tabBarShowLabel:false
         })}
       >
+        
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="Bluetooth" component={MonitorEntry} />
         <Tab.Screen name="Profile" component={Profile} />
@@ -40,5 +54,17 @@ const BottomNavigationBar = () => {
     </NavigationContainer>
   );
 };
+const styles = StyleSheet.create({
+  shadow:{
+    shadowColor :'#696969',
+    shadowOffset:{
+      width:10,
+      height:10,
+    },
+    shadowOpacity:0.25,
+    shadowRadius:3.5,
+    elevation:5,
+  }
+})
 
 export default BottomNavigationBar;

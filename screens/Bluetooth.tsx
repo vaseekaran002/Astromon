@@ -11,6 +11,8 @@ import DeviceModal from '../components/DeviceConnectionModal';
 import useBLE from '../hooks/useBLE';
 import { NavigationScreenProp } from 'react-navigation';
 import { COLORS } from '../constants/Theme';
+import { ImageBackground } from 'react-native';
+const bgimg = require('./assest/bg.png')
 
 export interface HomeScreenProps {
   navigation: NavigationScreenProp<any,any>
@@ -54,23 +56,36 @@ const Bluetooth = (props : HomeScreenProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
-    <View style={styles.heartRateTitleWrapper}>
-        <Text style={styles.heartRateTitleText}>
-          Please Connect to a Heart Rate Monitor
-        </Text>
-    </View>
-    <TouchableOpacity
-      onPress={openModal}
-      style={styles.ctaButton}>
-      <Text style={styles.ctaButtonText}>
-        Connect
-      </Text>
-    </TouchableOpacity>
-    <DeviceModal
-      closeModal={hideModal}
-      visible={isModalVisible}
-      devices={allDevices}
-    />
+      <ImageBackground
+  source={bgimg}
+  resizeMode="cover"
+  style={{
+    width: '100%',
+    height: '100%', // or a specific height value
+  }}
+>
+<View style={styles.heartRateTitleWrapper}>
+       
+    
+       <Text style={styles.heartRateTitleText}>
+         Please Connect to a Heart Rate Monitor
+       </Text>
+   </View>
+   <TouchableOpacity
+     onPress={openModal}
+     style={styles.ctaButton}>
+     <Text style={styles.ctaButtonText}>
+       Connect
+     </Text>
+   </TouchableOpacity>
+   <DeviceModal
+     closeModal={hideModal}
+     visible={isModalVisible}
+     devices={allDevices}
+   />
+  
+</ImageBackground>
+    
   </SafeAreaView>
   );
 };
@@ -84,6 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
   heartRateTitleText: {
     fontSize: 30,
@@ -105,6 +121,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 5,
     borderRadius: 8,
+    bottom:90
   },
   ctaButtonText: {
     fontSize: 18,
