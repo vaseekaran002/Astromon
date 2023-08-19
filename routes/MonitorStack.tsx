@@ -3,23 +3,35 @@ import Bluetooth from "../screens/Bluetooth"
 import { createAppContainer } from "react-navigation"
 import HealthMonitor from "../screens/HeallthMonitor"
 import { COLORS } from "../constants/Theme"
+import BottomNavigationBar from "./Bottomnavbar"
 
 
 
 
 const screens = {
-    Bluetooth : {
-        screen : Bluetooth,
-        navigationOptions : {
-            title : "CONNECTION"
-        }
+
+    Home : {
+        screen : BottomNavigationBar
     },
+  
+    // Bluetooth : {
+    //     screen : Bluetooth,
+    //     navigationOptions : {
+    //         title : "CONNECTION"
+    //     }
+    // },
+    
     HealthMonitor : {
         screen : HealthMonitor,
-        navigationOptions : {
-            title : "HEALTH MONITOR"
-        }
-    }
+        navigationOptions:()=>{
+            return {
+                title : "HEALTH MONITOR",
+            };
+         }
+       
+        
+    },
+   
 }
 
 

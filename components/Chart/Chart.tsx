@@ -4,7 +4,6 @@ import { WebView } from "react-native-webview";
 import { useImperativeHandle ,forwardRef } from 'react';
 import { ReactElement } from 'react';
 
-
   export type SetData = {
     setData: (data:number) => void;
   };
@@ -12,12 +11,25 @@ import { ReactElement } from 'react';
 type Props = {
     config?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
     dataSets?: number[];
-    style?: StyleProp<ViewStyle>;
+    chartWidth : number;
 };
 
 export const ChartJs = forwardRef(
     (props: Props, ref): ReactElement => {
 
+
+  
+      const styles = StyleSheet.create({
+       
+        webview: {
+         width : props.chartWidth ,
+        },
+        chart : {
+          height : 200,
+      
+        }
+       
+      });
 
   let webref: WebView<{ originWhitelist: string[]; ref: unknown; source: { uri: string } }> | null;
   
@@ -31,6 +43,7 @@ export const ChartJs = forwardRef(
       labels: [],
       datasets: [{
         backgroundColor: "rgb(42, 67, 126)",
+        label: 'ECG',
                   borderColor: "rgb(42, 67, 126)",
                   data: [],
                   fill: false,
@@ -58,7 +71,7 @@ export const ChartJs = forwardRef(
               intersect: false
           },
           plugins: {
-              legend: false
+              
           },
           scales: {
               x: {
@@ -75,8 +88,8 @@ export const ChartJs = forwardRef(
     };
 
   const canvasEl = document.createElement("canvas");
-  canvasEl.height = 100;
-  canvasEl.width = 300;
+  canvasEl.height = ${JSON.stringify(styles.chart.height)}
+ 
   document.body.appendChild(canvasEl);
   const ctx  = canvasEl.getContext('2d')
   window.canvasLine = new Chart(ctx,  config);true;
@@ -102,17 +115,7 @@ export const ChartJs = forwardRef(
 `);
   };
 
-
-  const styles = StyleSheet.create({
-    webview: {
-      height: 400 ,
-      width : useWindowDimensions().width  ,
-
-    },
-   
-  });
-
-
+  
 
   const setData = (dataSets : number) => {
     if (dataSets) {
@@ -130,7 +133,7 @@ export const ChartJs = forwardRef(
 
   return (
     
-         <View   style={styles.webview } >
+     
         <WebView
           originWhitelist={["*"]}
           ref={(r): WebView<{ originWhitelist: string[]; ref: unknown; source: { uri : string } }> | null =>
@@ -144,7 +147,9 @@ export const ChartJs = forwardRef(
           }}
           style={styles.webview }
         />
-      </View>
+     
+        
+     
     
   )
 
