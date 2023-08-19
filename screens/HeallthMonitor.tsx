@@ -1,18 +1,23 @@
 import React, { useRef, useState } from 'react'
-import { SafeAreaView, ScrollView, Text } from 'react-native'
+import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, ViewStyle, useWindowDimensions } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { useEffect } from 'react';
 import { bleManager } from '../constants/BleManager';
 import { Device } from 'react-native-ble-plx';
 import base64 from 'react-native-base64';
 import ChartJs, { SetData } from '../components/Chart/Chart';
-
+import HealthMonitorStyles from '../styles/HealthMonitorStyle';
+import { View } from 'react-native';
+import { COLORS } from '../constants/Theme';
+import Orientation from '../components/Orientation';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 
 
 
 const ECG_UUID = '54d29f5d-1023-4fca-a692-c9ec3c33a6b9';
 const ECG_CHARACTERISTIC = 'd80483ec-a402-45cb-a382-62cec74ddc3f';
-
+// const ECG_UUID = '281b8aba-a642-46e0-864f-70dbe6c41a60';
+// const ECG_CHARACTERISTIC = '4348f825-56a6-4511-9fe5-ef29f0e5bae9';
 const P2P_UUID = "c8f5dcc6-b70c-4eba-bd90-2058cb2718bb"
 const SPO2_CHARACTERISTIC = 'e3a352b2-d542-4152-ac7f-f90840de0bbc';
 const SYS_CHAR = 'd34a388e-f671-4f79-b72e-ee80dba7c507';
@@ -20,17 +25,26 @@ const DIA_CHAR = 'f0ee54d7-d1e3-4312-968f-40c8345c87a7';
 const HR_CHAR = "54a7fe1d-ea44-4be1-8c1a-2d30ad136349"
 export interface HealthMonitorProps {
     navigation: NavigationScreenProp<any,any>
+    route : RouteProp<any,any>
   };
 
 const HealthMonitor = (props : HealthMonitorProps) => {
 
    
-  const devices = props.navigation.getParam('devices')
-
+   const devices = props.route.params?.devices
   const [hr ,setHr]  = useState<number>(0)
   const [sys , setSys] = useState<number>(0)
   const [dia  , setDia] = useState<number>(0)
   const [spo2 , setSpo2] = useState<number>(0)
+  
+  const [flexdir ,setFlex] = useState<boolean>(Orientation.isPortrait() ? true : false)
+
+
+  Dimensions.addEventListener('change', () => {
+    setFlex(!flexdir);
+  });
+ 
+  
 
   
   const setDataRef = useRef<SetData>();
@@ -47,11 +61,16 @@ const HealthMonitor = (props : HealthMonitorProps) => {
       // }else{
       //   connecttoecg(devices[1])
       // }
-      connecttoecg(devices[0])
+      // if(devices){
+      //   connecttoecg(devices[0])
+      // }
+      
+    
+      
       
     },[])
 
-
+    
 
     const connecttoecg = async (device: Device) => {
       
@@ -159,19 +178,79 @@ const HealthMonitor = (props : HealthMonitorProps) => {
           console.log('No Device Connected');
         }
 
-
-
       }
-    
+
+     
 
 
     return (
-        <SafeAreaView>
-          <ScrollView    >
-          <ChartJs  ref={setDataRef} />
-          </ScrollView>
-            <Text style={{color:"black"}}>spo2 : {spo2}  hr : {hr}  sys : {sys} Dia : {dia}</Text>
-        </SafeAreaView>
+       
+          <View  style={[
+            HealthMonitorStyles.page,
+            {
+              flexDirection: flexdir ? 'column' : 'row',
+            },
+          ]}>
+            <View style={[HealthMonitorStyles.chartView,{
+              
+              flexDirection: 'column',
+            },]}>
+              <View style={{flex : 1 }}>
+              <ChartJs chartWidth={flexdir ? useWindowDimensions().width * 0.95 : useWindowDimensions().width * 0.7}  ref={setDataRef} />
+              </View>
+              
+               
+            </View>
+
+           
+          
+          <View 
+              style={[
+                    HealthMonitorStyles.container,
+                    {
+                      flexDirection: 'column',
+                    },
+                  ]}
+          > 
+            <View     
+              style={[
+                HealthMonitorStyles.row,
+                {
+                  
+                  flexDirection: 'row',
+                },
+              ]}
+              >
+              <View style={HealthMonitorStyles.box}>
+                <Text style={HealthMonitorStyles.ppgTitle}>SPO2</Text>
+                <Text style={HealthMonitorStyles.ppgValue} >{spo2}</Text>
+              </View>
+              <View style={HealthMonitorStyles.box}>
+                <Text style={HealthMonitorStyles.ppgTitle}>HR</Text>
+                <Text style={HealthMonitorStyles.ppgValue} >{hr}</Text>
+              </View>
+            
+            </View>
+            <View
+              style={[
+                HealthMonitorStyles.row,
+                {
+                  flexDirection: 'row',
+                },
+              ]}
+              >
+              <View style={HealthMonitorStyles.box}>
+                <Text style={HealthMonitorStyles.ppgTitle}>SYS</Text>
+                <Text style={HealthMonitorStyles.ppgValue} >{sys}</Text>
+              </View>
+              <View style={HealthMonitorStyles.box}>
+                <Text style={HealthMonitorStyles.ppgTitle}>DIA</Text>
+                <Text style={HealthMonitorStyles.ppgValue} >{dia}</Text>
+              </View>
+            </View>
+          </View>
+            </View>
+        
     )
 
 }

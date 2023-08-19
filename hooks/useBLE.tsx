@@ -16,7 +16,7 @@ interface BluetoothLowEnergyApi {
 }
 
 
-const ECG_UUID = '54d29f5d-1023-4fca-a692-c9ec3c33a6b9';
+const ECG_UUID = '281b8aba-a642-46e0-864f-70dbe6c41a60';
 const P2P_UUID = "c8f5dcc6-b70c-4eba-bd90-2058cb2718bb"
 
 

@@ -1,17 +1,37 @@
 import * as React from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { useEffect } from 'react';
-import BottomNavigationBar from './routes/Bottomnavbar'
+import { createStackNavigator } from '@react-navigation/stack';
+import { LogBox } from 'react-native';
+import MonitorStack from './routes/MonitorStack';
+import { NavigationContainer } from '@react-navigation/native';
+import Home from './screens/Home';
+import HealthMonitor from './screens/HeallthMonitor';
+import BottomNavigationBar from './routes/Bottomnavbar';
 
+LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const App = () => {
   
+
+  const Stack = createStackNavigator()
+
   useEffect(() =>{
     SplashScreen.hide();
   },[]);
   
   return (
-    <BottomNavigationBar/>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Entry"
+          component={BottomNavigationBar}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="HealthMonitor" component={HealthMonitor} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
