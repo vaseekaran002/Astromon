@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -8,6 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {Device} from 'react-native-ble-plx';
 import { COLORS } from '../constants/Theme';
@@ -21,37 +22,43 @@ type DeviceModalProps = {
   devices: Device[];
   visible: boolean;
   closeModal: () => void;
+  goBack : () => void;
+  sendSelectedDevices : (devices : Device) => void;
 };
 
-const DeviceModalListItem: FC<DeviceModalListItemProps> = props => {
-  const {item,  closeModal} = props;
-  const CloseModal = useCallback(() => {
-    closeModal();
-  }, [closeModal, item.item]);
+// const DeviceModalListItem: FC<DeviceModalListItemProps> = props => {
+//   const {item,  closeModal} = props;
+//   const CloseModal = useCallback(() => {
+//     closeModal();
+//   }, [closeModal, item.item]);
 
-  return (
-    <TouchableOpacity
-      onPress={CloseModal}
-      style={modalStyle.ctaButton}>
-      <Text style={modalStyle.ctaButtonText}>{item.item.name}</Text>
-    </TouchableOpacity>
-  );
-};
+//   return (
+//     <TouchableOpacity
+//       onPress={CloseModal}
+//       style={modalStyle.ctaButton}>
+//       <Text style={modalStyle.ctaButtonText}>{item.item.name}</Text>
+//     </TouchableOpacity>
+//   );
+// };
 
 const DeviceModal: FC<DeviceModalProps> = props => {
-  const {devices, visible,  closeModal} = props;
+  const {devices, visible,  closeModal,goBack ,sendSelectedDevices} = props;
+  const [selectedDevices , setSelectedDevices] = useState<Device[]>([])
 
-  const renderDeviceModalListItem = useCallback(
-    (item: ListRenderItemInfo<Device>) => {
-      return (
-        <DeviceModalListItem
-          item={item}
-          closeModal={closeModal}
-        />
-      );
-    },
-    [closeModal],
-  );
+
+  // const renderDeviceModalListItem = useCallback(
+  //   (item: ListRenderItemInfo<Device>) => {
+  //     return (
+  //       <DeviceModalListItem
+  //         item={item}
+  //         closeModal={closeModal}
+  //       />
+  //     );
+  //   },
+  //   [closeModal],
+  // );
+
+
 
   return (
     <Modal
@@ -68,12 +75,28 @@ const DeviceModal: FC<DeviceModalProps> = props => {
           <FlatList
           contentContainerStyle={modalStyle.modalFlatlistContiner}
           data={devices}
-          renderItem={renderDeviceModalListItem}
+          renderItem={({item}) => (
+            <TouchableOpacity onPress={() => sendSelectedDevices(item)}
+            style={modalStyle.ctaButton}>
+                <Text style={modalStyle.ctaButtonText}>{item.name}</Text>
+  
+           </TouchableOpacity>
+
+       )}
           ListEmptyComponent={<ActivityIndicator size="large" color="#000" />}
         />
-          
         
-       
+
+         <TouchableOpacity  
+       onPress={closeModal}
+       style={modalStyle.ctaButton}>
+        <Text style={modalStyle.ctaButtonText}>Connect</Text>
+       </TouchableOpacity>
+       <TouchableOpacity  
+       onPress={goBack}
+       style={modalStyle.ctaButton}>
+        <Text style={modalStyle.ctaButtonText}>Cancel</Text>
+       </TouchableOpacity>
       </SafeAreaView>
     </Modal>
   );
