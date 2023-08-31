@@ -1,43 +1,39 @@
-import { StyleSheet } from 'react-native'
-import { WebView } from "react-native-webview";
-import { useImperativeHandle ,forwardRef } from 'react';
-import { ReactElement } from 'react';
+import {StyleSheet} from 'react-native';
+import {WebView} from 'react-native-webview';
+import {useImperativeHandle, forwardRef} from 'react';
+import {ReactElement} from 'react';
 
-  export type SetData = {
-    setData: (data:number) => void;
-  };
-
-type Props = {
-    config?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    dataSets?: number[];
-    chartWidth : number;
+export type SetData = {
+  setData: (data: number) => void;
 };
 
-let DataBuff1 : number[] = []
-let DataBuff2 : number[] = []
-let LabelBuff1 : string[] = []
-let LabelBuff2 : string[] = []
+type Props = {
+  config?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  dataSets?: number[];
+  chartWidth: number;
+};
 
+let DataBuff1: number[] = [];
+let DataBuff2: number[] = [];
+let LabelBuff1: string[] = [];
+let LabelBuff2: string[] = [];
 
-export const ChartJs = forwardRef(
-    (props: Props, ref): ReactElement => {
+export const ChartJs = forwardRef((props: Props, ref): ReactElement => {
+  const styles = StyleSheet.create({
+    webview: {
+      width: props.chartWidth,
+    },
+    chart: {
+      height: 200,
+    },
+  });
 
+  let webref: WebView<{
+    originWhitelist: string[];
+    ref: unknown;
+    source: {uri: string};
+  }> | null;
 
-  
-      const styles = StyleSheet.create({
-       
-        webview: {
-         width : props.chartWidth ,
-        },
-        chart : {
-          height : 200,
-      
-        }
-       
-      });
-
-  let webref: WebView<{ originWhitelist: string[]; ref: unknown; source: { uri: string } }> | null;
-  
   const addChart = (): void => {
     webref?.injectJavaScript(`let delayBetweenPoints  = 0
             
@@ -120,22 +116,20 @@ export const ChartJs = forwardRef(
 `);
   };
 
-  
-
-  const setData = (data : number) => {
+  const setData = (data: number) => {
     var today = new Date();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    if(DataBuff1.length <= 500 && DataBuff2.length === 0){
-      DataBuff1.push(data)
-      LabelBuff1.push(time)
-      if(DataBuff1.length === 500 ){
-        console.log("inject")
+    var time =
+      today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+    if (DataBuff1.length <= 500 && DataBuff2.length === 0) {
+      DataBuff1.push(data);
+      LabelBuff1.push(time);
+      if (DataBuff1.length === 500) {
         webref?.injectJavaScript(` 
         window.canvasLine.data.labels = ${JSON.stringify(LabelBuff1)}
         window.canvasLine.data.datasets[0].data = ${JSON.stringify(DataBuff1)}
         window.canvasLine.update()`);
-        DataBuff1 = []
-        LabelBuff1 = []
+        DataBuff1 = [];
+        LabelBuff1 = [];
       }
     }
     // if (dataSets) {
@@ -152,26 +146,23 @@ export const ChartJs = forwardRef(
   }));
 
   return (
-    
-     
-        <WebView
-          originWhitelist={["*"]}
-          ref={(r): WebView<{ originWhitelist: string[]; ref: unknown; source: { uri : string } }> | null =>
-            (webref = r)
-          }
-          domStorageEnabled={true}
-          javaScriptEnabled={true}
-          source={{uri: 'file:///android_asset/index.html'}}
-          onLoadEnd={(): void => {
-            addChart();
-          }}
-          style={styles.webview }
-        />
-     
-        
-     
-    
-  )
-
-})
-export default ChartJs
+    <WebView
+      originWhitelist={['*']}
+      ref={(
+        r,
+      ): WebView<{
+        originWhitelist: string[];
+        ref: unknown;
+        source: {uri: string};
+      }> | null => (webref = r)}
+      domStorageEnabled={true}
+      javaScriptEnabled={true}
+      source={{uri: 'file:///android_asset/index.html'}}
+      onLoadEnd={(): void => {
+        addChart();
+      }}
+      style={styles.webview}
+    />
+  );
+});
+export default ChartJs;

@@ -1,7 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
-import BluetoothStateManager from 'react-native-bluetooth-state-manager' ;
+import React, {useEffect, useState} from 'react';
+import BluetoothStateManager from 'react-native-bluetooth-state-manager';
 import {
-  Dimensions,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -11,57 +10,49 @@ import {
 } from 'react-native';
 import DeviceModal from '../components/DeviceConnectionModal';
 import useBLE from '../hooks/useBLE';
-import { NavigationScreenProp } from 'react-navigation';
-import { COLORS } from '../constants/Theme';
-import { ImageBackground } from 'react-native';
-import { Device } from 'react-native-ble-plx';
-const bgimg = require('./assest/bg.png')
+import {NavigationScreenProp} from 'react-navigation';
+import {COLORS} from '../constants/Theme';
+import {ImageBackground} from 'react-native';
+import {Device} from 'react-native-ble-plx';
+import { bleManager } from '../constants/BleManager';
+
+const bgimg = require('./assest/bg.png');
 
 export interface HomeScreenProps {
-  navigation: NavigationScreenProp<any,any>
-};
+  navigation: NavigationScreenProp<any, any>;
+}
 
-const Bluetooth = (props : HomeScreenProps) => {
-  const {
-    requestPermission,
-    scanForPeripherals,
-    allDevices,
-   
-  } = useBLE();
+const Bluetooth = (props: HomeScreenProps) => {
+  const {requestPermission, scanForPeripherals, allDevices} = useBLE();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [selectedDevices , setSelectedDevices] = useState<Device[]>([])
 
 
-  const getSelectedDevices = (device : Device) => {
-    setSelectedDevices([...selectedDevices,device])
-  }
+  useEffect(() => {
+  
+  },[])
 
+  const getSelectedDevices = (devices: Device[]) => {
+    setIsModalVisible(false);
+    props.navigation.navigate('HealthMonitor', {devices: devices});
+  };
 
   const scanForDevices = () => {
     requestPermission(isGranted => {
-      if(isGranted){
+      if (isGranted) {
         scanForPeripherals();
       }
     });
-
   };
 
-  
   const closeModal = () => {
     setIsModalVisible(false);
   };
-  
-
-  const hideModal = () => {
-    setIsModalVisible(false);
-    props.navigation.navigate('HealthMonitor',{devices : selectedDevices})
-  };
 
   const openModal = async () => {
-    BluetoothStateManager.getState().then((bluetoothState) => {
+    BluetoothStateManager.getState().then(bluetoothState => {
       switch (bluetoothState) {
         case 'PoweredOff':
-          ToastAndroid.show('Please turn on Bluetooth',1000)
+          ToastAndroid.show('Please turn on Bluetooth', 1000);
           break;
         case 'PoweredOn':
           scanForDevices();
@@ -71,44 +62,33 @@ const Bluetooth = (props : HomeScreenProps) => {
           break;
       }
     });
-    
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
-  source={bgimg}
-  resizeMode="cover"
-  style={{
-    width: '100%',
-    height: '100%', // or a specific height value
-  }}
->
-<View style={styles.heartRateTitleWrapper}>
-       
-    
-       <Text style={styles.heartRateTitleText}>
-         Please Connect to a Heart Rate Monitor
-       </Text>
-   </View>
-   <TouchableOpacity
-     onPress={openModal}
-     style={styles.ctaButton}>
-     <Text style={styles.ctaButtonText}>
-       Scan for Device
-     </Text>
-   </TouchableOpacity>
-   <DeviceModal
-     closeModal={hideModal}
-     visible={isModalVisible}
-     devices={allDevices}
-     goBack = {closeModal}
-     sendSelectedDevices={getSelectedDevices}
-   />
-  
-</ImageBackground>
-    
-  </SafeAreaView>
+        source={bgimg}
+        resizeMode="cover"
+        style={{
+          width: '100%',
+          height: '100%', // or a specific height value
+        }}>
+        <View style={styles.heartRateTitleWrapper}>
+          <Text style={styles.heartRateTitleText}>
+            Please Connect to a Heart Rate Monitor
+          </Text>
+        </View>
+        <TouchableOpacity onPress={openModal} style={styles.ctaButton}>
+          <Text style={styles.ctaButtonText}>Scan for Device</Text>
+        </TouchableOpacity>
+        <DeviceModal
+          visible={isModalVisible}
+          devices={allDevices}
+          goBack={closeModal}
+          sendSelectedDevices={getSelectedDevices}
+        />
+      </ImageBackground>
+    </SafeAreaView>
   );
 };
 
@@ -121,7 +101,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   heartRateTitleText: {
     fontSize: 30,
@@ -133,7 +112,7 @@ const styles = StyleSheet.create({
   heartRateText: {
     fontSize: 25,
     marginTop: 15,
-    color:"#000"
+    color: '#000',
   },
   ctaButton: {
     backgroundColor: COLORS.primary,
@@ -143,7 +122,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 5,
     borderRadius: 8,
-    bottom:90
+    bottom: 90,
   },
   ctaButtonText: {
     fontSize: 18,
