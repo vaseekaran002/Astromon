@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -8,10 +8,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  TouchableWithoutFeedback,
+  ToastAndroid,
 } from 'react-native';
 import {Device} from 'react-native-ble-plx';
-import { COLORS } from '../constants/Theme';
+import {COLORS} from '../constants/Theme';
 
 type DeviceModalListItemProps = {
   item: ListRenderItemInfo<Device>;
@@ -21,44 +21,14 @@ type DeviceModalListItemProps = {
 type DeviceModalProps = {
   devices: Device[];
   visible: boolean;
-  closeModal: () => void;
-  goBack : () => void;
-  sendSelectedDevices : (devices : Device) => void;
+  goBack: () => void;
+  sendSelectedDevices: (devices: Device[]) => void;
 };
 
-// const DeviceModalListItem: FC<DeviceModalListItemProps> = props => {
-//   const {item,  closeModal} = props;
-//   const CloseModal = useCallback(() => {
-//     closeModal();
-//   }, [closeModal, item.item]);
-
-//   return (
-//     <TouchableOpacity
-//       onPress={CloseModal}
-//       style={modalStyle.ctaButton}>
-//       <Text style={modalStyle.ctaButtonText}>{item.item.name}</Text>
-//     </TouchableOpacity>
-//   );
-// };
-
 const DeviceModal: FC<DeviceModalProps> = props => {
-  const {devices, visible,  closeModal,goBack ,sendSelectedDevices} = props;
-  const [selectedDevices , setSelectedDevices] = useState<Device[]>([])
-
-
-  // const renderDeviceModalListItem = useCallback(
-  //   (item: ListRenderItemInfo<Device>) => {
-  //     return (
-  //       <DeviceModalListItem
-  //         item={item}
-  //         closeModal={closeModal}
-  //       />
-  //     );
-  //   },
-  //   [closeModal],
-  // );
-
-
+  const {devices, visible,  goBack, sendSelectedDevices} = props;
+  const [selectedDevices, setSelectedDevices] = useState<Device[]>([]);
+ 
 
   return (
     <Modal
@@ -70,33 +40,54 @@ const DeviceModal: FC<DeviceModalProps> = props => {
         <Text style={modalStyle.modalTitleText}>
           Tap on a device to connect
         </Text>
-        
-          
-          <FlatList
+
+        <FlatList
           contentContainerStyle={modalStyle.modalFlatlistContiner}
           data={devices}
           renderItem={({item}) => (
-            <TouchableOpacity onPress={() => sendSelectedDevices(item)}
-            style={modalStyle.ctaButton}>
-                <Text style={modalStyle.ctaButtonText}>{item.name}</Text>
-  
-           </TouchableOpacity>
-
-       )}
+            <TouchableOpacity
+              onPress={() => {
+                if (selectedDevices.includes(item)) {
+                  console.log();
+                  setSelectedDevices(
+                    selectedDevices.filter(itm => itm !== item),
+                  );
+                } else {
+                  setSelectedDevices([...selectedDevices, item]);
+                }
+              }}
+              style={
+                selectedDevices.includes(item)
+                  ? modalStyle.ctaButtonSelected
+                  : modalStyle.ctaButton
+              }>
+              <Text
+                style={
+                  selectedDevices.includes(item)
+                    ? modalStyle.ctaButtonTextSelected
+                    : modalStyle.ctaButtonText
+                }>
+                {item.name}
+              </Text>
+            </TouchableOpacity>
+          )}
           ListEmptyComponent={<ActivityIndicator size="large" color="#000" />}
         />
-        
 
-         <TouchableOpacity  
-       onPress={closeModal}
-       style={modalStyle.ctaButton}>
-        <Text style={modalStyle.ctaButtonText}>Connect</Text>
-       </TouchableOpacity>
-       <TouchableOpacity  
-       onPress={goBack}
-       style={modalStyle.ctaButton}>
-        <Text style={modalStyle.ctaButtonText}>Cancel</Text>
-       </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            if (selectedDevices.length === 0) {
+              ToastAndroid.show('please select a device to connect', 1000);
+            } else {
+              sendSelectedDevices(selectedDevices);
+            }
+          }}
+          style={modalStyle.ctaButton}>
+          <Text style={modalStyle.ctaButtonText}>Connect</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={goBack} style={modalStyle.ctaButton}>
+          <Text style={modalStyle.ctaButtonText}>Cancel</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </Modal>
   );
@@ -129,10 +120,21 @@ const modalStyle = StyleSheet.create({
     fontWeight: 'bold',
     marginHorizontal: 20,
     textAlign: 'center',
-    color : '#000'
+    color: '#000',
   },
   ctaButton: {
     backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 50,
+    marginHorizontal: 20,
+    marginBottom: 5,
+    borderRadius: 8,
+  },
+  ctaButtonSelected: {
+    backgroundColor: COLORS.white,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,
@@ -144,6 +146,11 @@ const modalStyle = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
+  },
+  ctaButtonTextSelected: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: COLORS.primary,
   },
 });
 
