@@ -1,9 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
+import BluetoothStateManager from 'react-native-bluetooth-state-manager' ;
 import {
   Dimensions,
   SafeAreaView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -12,6 +14,7 @@ import useBLE from '../hooks/useBLE';
 import { NavigationScreenProp } from 'react-navigation';
 import { COLORS } from '../constants/Theme';
 import { ImageBackground } from 'react-native';
+import { Device } from 'react-native-ble-plx';
 const bgimg = require('./assest/bg.png')
 
 export interface HomeScreenProps {
@@ -26,10 +29,13 @@ const Bluetooth = (props : HomeScreenProps) => {
    
   } = useBLE();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  
+  const [selectedDevices , setSelectedDevices] = useState<Device[]>([])
 
 
- 
+  const getSelectedDevices = (device : Device) => {
+    setSelectedDevices([...selectedDevices,device])
+  }
+
 
   const scanForDevices = () => {
     requestPermission(isGranted => {
@@ -41,17 +47,31 @@ const Bluetooth = (props : HomeScreenProps) => {
   };
 
   
-
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
   
 
   const hideModal = () => {
     setIsModalVisible(false);
-    props.navigation.navigate('HealthMonitor',{devices : allDevices})
+    props.navigation.navigate('HealthMonitor',{devices : selectedDevices})
   };
 
   const openModal = async () => {
-    scanForDevices();
-    setIsModalVisible(true);
+    BluetoothStateManager.getState().then((bluetoothState) => {
+      switch (bluetoothState) {
+        case 'PoweredOff':
+          ToastAndroid.show('Please turn on Bluetooth',1000)
+          break;
+        case 'PoweredOn':
+          scanForDevices();
+          setIsModalVisible(true);
+          break;
+        default:
+          break;
+      }
+    });
+    
   };
 
   return (
@@ -75,13 +95,15 @@ const Bluetooth = (props : HomeScreenProps) => {
      onPress={openModal}
      style={styles.ctaButton}>
      <Text style={styles.ctaButtonText}>
-       Connect
+       Scan for Device
      </Text>
    </TouchableOpacity>
    <DeviceModal
      closeModal={hideModal}
      visible={isModalVisible}
      devices={allDevices}
+     goBack = {closeModal}
+     sendSelectedDevices={getSelectedDevices}
    />
   
 </ImageBackground>

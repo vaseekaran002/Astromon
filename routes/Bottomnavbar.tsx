@@ -27,16 +27,6 @@ const BottomNavigationBar = () => {
             }
             return <Icon name={iconName} size={size} color={"#36454F"} />;
           },
-          // tabBarStyle: { backgroundColor: '#C2E9FB',
-          //               bottom:10,
-          //               left:20,
-          //                right:20,
-                        
-          //             borderRadius:15,
-          //           height:60, 
-          //         position:'absolute',
-          //         ...styles.shadow}, 
-           
           tabBarActiveTintColor:COLORS.primary, 
           tabBarInactiveTintColor: 'gray',
           tabBarShowLabel:false

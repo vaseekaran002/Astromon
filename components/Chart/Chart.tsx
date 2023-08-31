@@ -1,5 +1,4 @@
-import { StyleSheet, useWindowDimensions } from 'react-native'
-import { StyleProp, View,ViewStyle } from "react-native";
+import { StyleSheet } from 'react-native'
 import { WebView } from "react-native-webview";
 import { useImperativeHandle ,forwardRef } from 'react';
 import { ReactElement } from 'react';
@@ -13,6 +12,12 @@ type Props = {
     dataSets?: number[];
     chartWidth : number;
 };
+
+let DataBuff1 : number[] = []
+let DataBuff2 : number[] = []
+let LabelBuff1 : string[] = []
+let LabelBuff2 : string[] = []
+
 
 export const ChartJs = forwardRef(
     (props: Props, ref): ReactElement => {
@@ -117,14 +122,29 @@ export const ChartJs = forwardRef(
 
   
 
-  const setData = (dataSets : number) => {
-    if (dataSets) {
-        webref?.injectJavaScript(` var today = new Date();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        removeData(window.canvasLine)
-        addData(window.canvasLine,time,${JSON.stringify(dataSets)})`);
-    
+  const setData = (data : number) => {
+    var today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    if(DataBuff1.length <= 500 && DataBuff2.length === 0){
+      DataBuff1.push(data)
+      LabelBuff1.push(time)
+      if(DataBuff1.length === 500 ){
+        console.log("inject")
+        webref?.injectJavaScript(` 
+        window.canvasLine.data.labels = ${JSON.stringify(LabelBuff1)}
+        window.canvasLine.data.datasets[0].data = ${JSON.stringify(DataBuff1)}
+        window.canvasLine.update()`);
+        DataBuff1 = []
+        LabelBuff1 = []
+      }
     }
+    // if (dataSets) {
+    //     webref?.injectJavaScript(` var today = new Date();
+    //     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    //     removeData(window.canvasLine)
+    //     addData(window.canvasLine,time,${JSON.stringify(dataSets)})`);
+
+    // }
   };
 
   useImperativeHandle(ref, () => ({

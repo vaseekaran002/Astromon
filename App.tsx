@@ -3,9 +3,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LogBox } from 'react-native';
-import MonitorStack from './routes/MonitorStack';
 import { NavigationContainer } from '@react-navigation/native';
-import Home from './screens/Home';
 import HealthMonitor from './screens/HeallthMonitor';
 import BottomNavigationBar from './routes/Bottomnavbar';
 

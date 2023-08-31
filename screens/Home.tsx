@@ -71,13 +71,13 @@ const Home = () => {
       height: '100%', // or a specific height value
     }}
   >
-    <Text style={Styless.greet}>{greet}{userData.name}</Text>
+    {/* <Text style={Styless.greet}>{greet}{userData.name}</Text> */}
     <SafeAreaView>
       
       <View>
      
   <Text style={Styless.txt}>ASTROMON</Text>
-  <Text style={Styless.slo}>"Your Heart's Guardian, Every Beat Counts."</Text>
+  {/* <Text style={Styless.slo}>"Your Heart's Guardian, Every Beat Counts."</Text> */}
   
  
     </View>

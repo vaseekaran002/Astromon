@@ -32,11 +32,12 @@ const HealthMonitor = (props : HealthMonitorProps) => {
 
    
    const devices = props.route.params?.devices
+
+   console.log(devices)
   const [hr ,setHr]  = useState<number>(0)
   const [sys , setSys] = useState<number>(0)
   const [dia  , setDia] = useState<number>(0)
   const [spo2 , setSpo2] = useState<number>(0)
-  
   const [flexdir ,setFlex] = useState<boolean>(Orientation.isPortrait() ? true : false)
 
 
@@ -61,9 +62,9 @@ const HealthMonitor = (props : HealthMonitorProps) => {
       // }else{
       //   connecttoecg(devices[1])
       // }
-      // if(devices){
-      //   connecttoecg(devices[0])
-      // }
+      if(devices){
+        connecttoecg(devices[0])
+      }
       
     
       
