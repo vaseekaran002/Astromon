@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, ImageBackground, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import { RadioButton, TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Formik } from 'formik';
@@ -8,7 +8,10 @@ import Styles from '../styles/ProfileStyle';
 import { NavigationScreenProp } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../constants/Theme';
+import { Dropdown } from 'react-native-element-dropdown';
 import Styless from '../styles/HomeStyles';
+import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import DropDownPicker from 'react-native-dropdown-picker';
 const bgimg = require('./assest/bg.png')
 
 
@@ -39,7 +42,7 @@ const Profile = (props: HomeScreenProps) => {
    
 
   };
-
+var gender  = [  { label: 'MALE', value: 'male' },  { label: 'FEMALE', value: 'female' },];
   const validation = Yup.object().shape({
     name: Yup.string().required('Enter name'),
     age: Yup.string().required('Enter age'),
@@ -53,6 +56,8 @@ const Profile = (props: HomeScreenProps) => {
   const [formValues, setFormValues] = useState<FormValues>(initialValues);
   const [isViewOnly, setIsViewOnly] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [genderr,setgender] = useState(false);
+  const [place,setplace] = useState("select gender")
   const [touchedInputs, setTouchedInputs] = useState({
     name: false,
     age: false,
@@ -80,7 +85,8 @@ const Profile = (props: HomeScreenProps) => {
       if (storedData) {
         const storedValues: FormValues = JSON.parse(storedData);
         setFormValues(storedValues);
-        setIsViewOnly(false); // Set the form to view-only if data is present
+        setIsViewOnly(false);
+        setgender(true); 
         console.log(storedData);
       } else {
         setIsViewOnly(true); // Set the form editable when there is no data
@@ -99,7 +105,7 @@ const Profile = (props: HomeScreenProps) => {
     const dataToStore = JSON.stringify(values);
     try {
       await AsyncStorage.setItem('userProfile', dataToStore);
-      setFormValues(values); // Update the formValues state with the new values
+      setFormValues(values); 
       console.log('Form values stored in AsyncStorage successfully!');
     } catch (error) {
       console.error('Error storing form values in AsyncStorage:', error);
@@ -122,164 +128,163 @@ const Profile = (props: HomeScreenProps) => {
   return null}
  
  return (
+ 
+  <SafeAreaView style={Styles.container}>
   
-  <ImageBackground
-  source={bgimg}
-  resizeMode="cover"
-  style={{
-    width: '100%',
-    height: '100%', 
-  }}
->
-    <View style={Styles.container}>
-       
+   
+  <StatusBar backgroundColor={COLORS.primary}  />
    
      
       <Formik initialValues={formValues} validationSchema={validation} onSubmit={handleSubmit}>
-        {({ handleChange, handleSubmit, values, errors, }) => (
-          <KeyboardAvoidingView behavior="padding">
-           <ScrollView>
-            <View>
-              
-                <Text style={Styles.errortxt}>{touchedInputs.name && errors.name}</Text>
-                <TextInput
-                  style={Styles.textinpt}
-                  label="Name"
-                  placeholder="Enter name"
-                  placeholderTextColor={COLORS.placeholder}
-                  onChangeText={handleChange('name')}
-                  value={values.name}
-                  editable={isViewOnly}
-                />
+        {({ handleChange, handleSubmit, values, errors, }) => {
+         return (
+           <KeyboardAvoidingView behavior="padding">
+             <ScrollView>
+               <View style={Styles.formm}>
 
-                <Text style={Styles.errortxt}>{touchedInputs.age && errors.age}</Text>
-                <TextInput
-                  style={Styles.textinpt}
-                  label="Age"
-                  placeholder="Enter age"
-                  placeholderTextColor={COLORS.placeholder}
-                  onChangeText={handleChange('age')}
-                  value={values.age}
-                  keyboardType="numeric"
-                  editable={isViewOnly}
-                />
+                 <Text style={Styles.errortxt}>{touchedInputs.name || errors.name}</Text>
+                 <TextInput
+                   style={Styles.textinpt}
+                   label="Name"
+                   placeholder="Enter name"
+                   placeholderTextColor={COLORS.placeholder}
+                   onChangeText={handleChange('name')}
+                   value={values.name}
+                   editable={isViewOnly} />
 
-                <Text style={Styles.errortxt}>{touchedInputs.deviceid && errors.deviceid}</Text>
-                <TextInput
-                  style={Styles.textinpt}
-                  label="DeviceID"
-                  placeholder="Enter deviceid"
-                  placeholderTextColor={COLORS.placeholder}
-                  onChangeText={handleChange('deviceid')}
-                  value={values.deviceid}
-                  keyboardType="numeric"
-                  editable={isViewOnly}
-                />
+                 <Text style={Styles.errortxt}>{touchedInputs.age || errors.age}</Text>
+                 <TextInput
+                   style={Styles.textinpt}
+                   label="Age"
+                   placeholder="Enter age"
+                   placeholderTextColor={COLORS.placeholder}
+                   onChangeText={handleChange('age')}
+                   value={values.age}
+                   keyboardType="numeric"
+                   editable={isViewOnly} />
 
-                <Text style={Styles.errortxt}>{touchedInputs.bloodgroup && errors.bloodgroup}</Text>
-                <TextInput
-                  style={Styles.textinpt}
-                  label="Bloodgroup"
-                  placeholder="Enter bloodgroup"
-                  placeholderTextColor={COLORS.placeholder}
-                  onChangeText={handleChange('bloodgroup')}
-                  value={values.bloodgroup}
-                  editable={isViewOnly}
-                />
+                 <Text style={Styles.errortxt}>{touchedInputs.deviceid || errors.deviceid}</Text>
+                 <TextInput
+                   style={Styles.textinpt}
+                   label="DeviceID"
+                   placeholder="Enter deviceid"
+                   placeholderTextColor={COLORS.placeholder}
+                   onChangeText={handleChange('deviceid')}
+                   value={values.deviceid}
+                   keyboardType="numeric"
+                   editable={isViewOnly} />
 
-                <View style={Styles.rdiobtncontainer}>
-                  <RadioButton.Group
-                    onValueChange={(value) => handleChange('gender')(value)}
-                    value={values.gender}
-                  >
-                    <View style={Styles.genderContainer} >
-                      <Text style={Styles.gender}>Gender:</Text>
-                      <View style={Styles.genderOption}>
-                        <Text style={Styles.genderText}>Male</Text>
-                        <RadioButton value="Male" />
-                      </View>
-                      <View style={Styles.genderOption}>
-                        <Text style={Styles.genderText}>Female</Text>
-                        <RadioButton value="Female" />
-                      </View>
-                    </View>
-                  </RadioButton.Group>
-                </View>
+                 <Text style={Styles.errortxt}>{touchedInputs.bloodgroup || errors.bloodgroup}</Text>
+                 <TextInput
+                   style={Styles.textinpt}
+                   label="Bloodgroup"
+                   placeholder="Enter bloodgroup"
+                   placeholderTextColor={COLORS.placeholder}
+                   onChangeText={handleChange('bloodgroup')}
+                   value={values.bloodgroup}
+                   editable={isViewOnly} />
+                 <Dropdown  selectedTextStyle={style1.pl}  placeholder={place} placeholderStyle={style1.pl} style={style1.dropdown}  itemTextStyle={style1.text} data={gender} labelField={'label'} valueField={'label'} disable={genderr}
+                  
+                  onChange={(item: { label: string; value: string }) => {
+                    handleChange('gender')(item.value);
+                    setplace(item.label) // Update the 'gender' field in the form
+                  }}
+                  
+                   />
 
-                <Text style={Styles.errortxt}>{touchedInputs.height && errors.height}</Text>
-                <TextInput
-                  style={Styles.textinpt}
-                  label="Height"
-                  placeholder="Enter height"
-                  placeholderTextColor={COLORS.placeholder}
-                  onChangeText={handleChange('height')}
-                  value={values.height}
-                  keyboardType="numeric"
-                  editable={isViewOnly}
-                />
+                 <Text style={Styles.errortxt}>{touchedInputs.height || errors.height}</Text>
+                 <TextInput
+                   style={Styles.textinpt}
+                   label="Height"
+                   placeholder="Enter height"
+                   placeholderTextColor={COLORS.placeholder}
+                   onChangeText={handleChange('height')}
+                   value={values.height}
+                   keyboardType="numeric"
+                   editable={isViewOnly} />
 
-                <Text style={Styles.errortxt}>{touchedInputs.weight&& errors.weight}</Text>
-                <TextInput
-                  style={Styles.textinpt}
-                  label="Weight"
-                  placeholder="Enter weight"
-                  placeholderTextColor={COLORS.placeholder}
-                  onChangeText={handleChange('weight')}
-                  value={values.weight}
-                  keyboardType="numeric"
-                  editable={isViewOnly}
-                />
-             
-            </View>
-            </ScrollView>
-           
-            <View style={Styles.btnscontainter}>
-              {isViewOnly ? (
-              <TouchableOpacity
-              onPress={() => {
-                setIsViewOnly(false);
-                setTouchedInputs((prevTouchedInputs) => ({
-                  ...prevTouchedInputs,
-                  name: true,
-                  age: true,
-                  deviceid: true,
-                  bloodgroup: true,
-                  gender: true,
-                  height: true,
-                  weight: true,
-                }));
-                handleSubmit();
-              }}
-              style={Styles.appbtncontainer}
-            >
-              <Text style={Styles.appbtntext} >Submit</Text>
-            </TouchableOpacity>
-               
-              ) : (
-                
+                 <Text style={Styles.errortxt}>{touchedInputs.weight || errors.weight}</Text>
+                 <TextInput
+                   style={Styles.textinpt}
+                   label="Weight"
+                   placeholder="Enter weight"
+                   placeholderTextColor={COLORS.placeholder}
+                   onChangeText={handleChange('weight')}
+                   value={values.weight}
+                   keyboardType="numeric"
+                   editable={isViewOnly} />
+
+               </View>
+             </ScrollView>
+
+             <View style={Styles.btnscontainter}>
+               {isViewOnly ? (
                  <TouchableOpacity
-                 style={Styles.approundbtn}
-                 onPress={() => setIsViewOnly(true)}
-               >
-                 <Icon name="create-outline" size={30} color="white" />
-               </TouchableOpacity>
-              )}
-              
-            </View>
-            
-          </KeyboardAvoidingView>
-        )}
+                   onPress={() => {
+                     if (!Object.values(errors).some(error => error)) {
+                       setIsViewOnly(false);
+                       setgender(true);
+                       setTouchedInputs((prevTouchedInputs) => ({
+                         ...prevTouchedInputs,
+                         name: true,
+                         age: true,
+                         deviceid: true,
+                         bloodgroup: true,
+                         gender: true,
+                         height: true,
+                         weight: true,
+                       }));
+                       handleSubmit();
+                     }
+                   } }
+                   style={Styles.appbtncontainer}
+                 >
+                   <Text style={Styles.appbtntext}>Submit</Text>
+                 </TouchableOpacity>
+               ) : (
+                 <TouchableOpacity
+                   onPress={() => {
+                     setIsViewOnly(true);
+                     setgender(false);
+
+                   } }
+                   style={Styles.approundbtn}
+                 >
+                   <Text style={Styles.appbtntext}>Edit</Text>
+                 </TouchableOpacity>
+               )}
+             </View>
+
+
+           </KeyboardAvoidingView>
+         );
+       }}
       </Formik>
       
       
       
     
-    </View>
-    </ImageBackground>
+   
+    </SafeAreaView>
+   
+
   );
         
 
-              };
+   };
+   const style1 = StyleSheet.create( {
+   dropdown : {
+   
+
+   },
+   text : {
+   color: 'black'
+   },
+   pl : {
+    color: 'black'
+   }
+
+   } )
 
 
 export default Profile;
