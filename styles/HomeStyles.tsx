@@ -13,10 +13,16 @@ const   Styless = StyleSheet.create({
     shadowRadius: 2,
   },
     container : {
+      flexWrap:'wrap',
+      flex:1,
         display:'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection:'column'
         
+    },
+    viw:{
+     flexGrow:1
     },
     greet:{
       fontSize:30,
@@ -25,15 +31,22 @@ const   Styless = StyleSheet.create({
       alignContent:"center",
       top:70,
       left:20,
-      color:"black"
+      color:"black",
+      textShadowRadius: 1,
+    textShadowOffset: {
+      width: 0,
+      height: 1,
+    },
 
     },
     slo : {
       color:"#FF8B94",
-      display:'flex',
+      
   alignContent:'center',
-  top:10,
+  top:300,
+  left:5,
       fontSize:20,
+      
       
     },
     
@@ -44,8 +57,15 @@ const   Styless = StyleSheet.create({
              fontWeight:'bold',
              fontSize:40,
              alignContent:'center',
-             marginLeft:90,
-             marginTop:250
+             left:90,
+             top:200,
+              textShadowRadius: 4,
+    textShadowOffset: {
+      width: 0,
+      height: 2,
+    },
+            
+             
              
              
     },

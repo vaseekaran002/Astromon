@@ -6,6 +6,8 @@ import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import HealthMonitor from './screens/HeallthMonitor';
 import BottomNavigationBar from './routes/Bottomnavbar';
+import Onboarding from './screens/Onboarding';
+
 
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
@@ -20,16 +22,23 @@ const App = () => {
   },[]);
   
   return (
+    
     <NavigationContainer>
       <Stack.Navigator>
+      <Stack.Screen 
+          name="land"
+          component={Onboarding}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
-          name="Entry"
+          name="BottomNavigationBar"
           component={BottomNavigationBar}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="HealthMonitor" component={HealthMonitor} />
       </Stack.Navigator>
     </NavigationContainer>
+    
   );
 };
 

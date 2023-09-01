@@ -14,6 +14,9 @@ textinpt:{
  backgroundColor: "transparent",
  
 },
+formm:{
+flex:1
+},
 errortxt:{
 color:"red"
 
@@ -41,13 +44,14 @@ txt:{
     },
    
     container:{
-        flex: 1,
+      flex:1,
+        flexDirection:'column',
         padding: 20,
-        
+        marginBottom:50,
         alignItems: 'stretch',
         borderStyle: "solid",
        backgroundColor:"white",
-       justifyContent: 'space-between',
+      
       
     },
     textt:{
@@ -58,7 +62,8 @@ txt:{
     ,
     btnscontainter:{
 justifyContent:"space-between",
-display:"flex"
+
+
     },
     bluetoothbtncontainer:{
       elevation: 8,
@@ -84,8 +89,8 @@ display:"flex"
         paddingVertical: 10,
         paddingHorizontal: 10,
         marginTop:5,
-        margin:5
-      
+        margin:5,
+    
 
     },
     approundbtn:{
@@ -96,9 +101,9 @@ display:"flex"
         paddingVertical: 10,
         paddingHorizontal: 10,
         position: 'absolute', // Use absolute positioning
-        bottom: 10, // Adjust this value for spacing from the bottom
+         // Adjust this value for spacing from the bottom
         right: 10, // Adjust this value for spacing from the right
-      
+        top:40
     },
     appbtntext:{
         fontSize: 18,
