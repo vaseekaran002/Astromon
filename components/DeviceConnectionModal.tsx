@@ -26,9 +26,8 @@ type DeviceModalProps = {
 };
 
 const DeviceModal: FC<DeviceModalProps> = props => {
-  const {devices, visible,  goBack, sendSelectedDevices} = props;
+  const {devices, visible, goBack, sendSelectedDevices} = props;
   const [selectedDevices, setSelectedDevices] = useState<Device[]>([]);
- 
 
   return (
     <Modal
@@ -80,6 +79,7 @@ const DeviceModal: FC<DeviceModalProps> = props => {
               ToastAndroid.show('please select a device to connect', 1000);
             } else {
               sendSelectedDevices(selectedDevices);
+              setSelectedDevices([]);
             }
           }}
           style={modalStyle.ctaButton}>

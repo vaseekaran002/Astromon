@@ -14,7 +14,9 @@ import {NavigationScreenProp} from 'react-navigation';
 import {COLORS} from '../constants/Theme';
 import {ImageBackground} from 'react-native';
 import {Device} from 'react-native-ble-plx';
-import { bleManager } from '../constants/BleManager';
+import {bleManager} from '../constants/BleManager';
+import {ECG_UUID, PPG_UUID} from '@env';
+import {useIsFocused} from '@react-navigation/native';
 
 const bgimg = require('./assest/bg.png');
 
@@ -25,11 +27,18 @@ export interface HomeScreenProps {
 const Bluetooth = (props: HomeScreenProps) => {
   const {requestPermission, scanForPeripherals, allDevices} = useBLE();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-
-
+  const isFocused = useIsFocused();
   useEffect(() => {
-  
-  },[])
+    if (isFocused) {
+      console.log('blueee');
+      let connectedDevices = bleManager.connectedDevices([ECG_UUID, PPG_UUID]);
+      connectedDevices.then(itm => {
+        itm.map(device => {
+          bleManager.cancelDeviceConnection(device.id);
+        });
+      });
+    }
+  }, [isFocused]);
 
   const getSelectedDevices = (devices: Device[]) => {
     setIsModalVisible(false);

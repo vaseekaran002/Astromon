@@ -4,6 +4,7 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import {Device} from 'react-native-ble-plx';
 import DeviceInfo from 'react-native-device-info';
 import {PERMISSIONS, requestMultiple} from 'react-native-permissions';
+import {ECG_UUID, PPG_UUID} from '@env';
 type VoidCallback = (result: boolean) => void;
 
 import {bleManager} from '../constants/BleManager';
@@ -14,8 +15,8 @@ interface BluetoothLowEnergyApi {
   allDevices: Device[];
 }
 
-const ECG_UUID = '281b8aba-a642-46e0-864f-70dbe6c41a60';
-const P2P_UUID = 'c8f5dcc6-b70c-4eba-bd90-2058cb2718bb';
+// const ECG_UUID = '281b8aba-a642-46e0-864f-70dbe6c41a60';
+// const PPG_UUID = 'c8f5dcc6-b70c-4eba-bd90-2058cb2718bb';
 
 export default function useBLE(): BluetoothLowEnergyApi {
   const [allDevices, setAllDevices] = useState<Device[]>([]);
@@ -61,7 +62,7 @@ export default function useBLE(): BluetoothLowEnergyApi {
     devices.findIndex(device => nextDevice.id === device.id) > -1;
 
   const scanForPeripherals = () =>
-    bleManager.startDeviceScan([ECG_UUID, P2P_UUID], null, (error, device) => {
+    bleManager.startDeviceScan([ECG_UUID, PPG_UUID], null, (error, device) => {
       if (error) {
         console.log(error);
       }
